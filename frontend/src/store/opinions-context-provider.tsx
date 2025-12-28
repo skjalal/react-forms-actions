@@ -8,7 +8,7 @@ const OpinionsContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
   useEffect(() => {
     async function loadOpinions() {
       const response = await fetch("http://localhost:3000/opinions");
-      const opinions = await response.json();
+      const opinions: Opinion[] = await response.json();
       setOpinions(opinions);
     }
 
@@ -36,7 +36,8 @@ const OpinionsContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
     setOpinions((prevOpinions) => {
       return prevOpinions.map((opinion) => {
         if (opinion.id === id) {
-          return { ...opinion, votes: opinion.votes + 1 };
+          const votes = opinion.votes ? opinion.votes + 1 : 0;
+          return { ...opinion, votes: votes };
         }
         return opinion;
       });
@@ -47,7 +48,8 @@ const OpinionsContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
     setOpinions((prevOpinions) => {
       return prevOpinions.map((opinion) => {
         if (opinion.id === id) {
-          return { ...opinion, votes: opinion.votes - 1 };
+          const votes = opinion.votes ? opinion.votes - 1 : 0;
+          return { ...opinion, votes: votes };
         }
         return opinion;
       });
@@ -55,7 +57,7 @@ const OpinionsContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
   };
 
   const contextValue: OpinionsContextProps = {
-    opinions: opinions,
+    opinions,
     addOpinion,
     upvoteOpinion,
     downvoteOpinion,

@@ -1,9 +1,9 @@
 type Opinion = {
-  id: number;
+  id?: number;
   title: string;
   userName: string;
   body: string;
-  votes: number;
+  votes?: number;
 };
 
 type OpinionProps = {
@@ -17,4 +17,23 @@ type OpinionsContextProps = {
   downvoteOpinion: (id: number) => void;
 };
 
-export type { OpinionProps, Opinion, OpinionsContextProps };
+type FormState = {
+  errors: string[];
+  enteredValues?: FormValue;
+};
+
+type FormValue = {
+  id?: number;
+  votes?: number;
+  userName: string;
+  title: string;
+  body: string;
+};
+
+export type {
+  OpinionProps,
+  Opinion,
+  OpinionsContextProps,
+  FormState,
+  FormValue,
+};
