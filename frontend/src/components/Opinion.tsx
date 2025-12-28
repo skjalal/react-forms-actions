@@ -1,10 +1,26 @@
-import React from "react";
+import React, { useActionState } from "react";
 import type { OpinionProps } from "../util/data-types.ts";
+import { useOpinion } from "../store/opinions-context.tsx";
 
 const Opinion: React.FC<OpinionProps> = ({
   opinion: { id, title, body, userName, votes },
 }) => {
-  console.log("Opinion ID: ", id);
+  const { upvoteOpinion, downvoteOpinion } = useOpinion();
+  const upvoteAction = async (): Promise<void> => {
+    await upvoteOpinion(id!);
+  };
+
+  const downvoteAction = async (): Promise<void> => {
+    await downvoteOpinion(id!);
+  };
+
+  const [upvoteFormState, upvoteFormAction, upvotePending] = useActionState<
+    Promise<void> | null,
+    FormData
+  >(upvoteAction, null);
+  const [downvoteFormState, downvoteFormAction, downvotePending] =
+    useActionState<Promise<void> | null, FormData>(downvoteAction, null);
+
   return (
     <article>
       <header>
@@ -13,7 +29,10 @@ const Opinion: React.FC<OpinionProps> = ({
       </header>
       <p>{body}</p>
       <form className="votes">
-        <button>
+        <button
+          formAction={upvoteFormAction}
+          disabled={upvotePending || downvotePending}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -33,7 +52,10 @@ const Opinion: React.FC<OpinionProps> = ({
 
         <span>{votes}</span>
 
-        <button>
+        <button
+          formAction={downvoteFormAction}
+          disabled={upvotePending || downvotePending}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"

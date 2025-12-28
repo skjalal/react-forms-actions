@@ -15,7 +15,7 @@ const OpinionsContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
     loadOpinions();
   }, []);
 
-  const addOpinion = async (enteredOpinionData: Opinion) => {
+  const addOpinion = async (enteredOpinionData: Opinion): Promise<void> => {
     const response = await fetch("http://localhost:3000/opinions", {
       method: "POST",
       headers: {
@@ -32,11 +32,20 @@ const OpinionsContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
     setOpinions((prevOpinions) => [savedOpinion, ...prevOpinions]);
   };
 
-  const upvoteOpinion = (id: number): void => {
+  const upvoteOpinion = async (id: number): Promise<void> => {
+    const response = await fetch(
+      "http://localhost:3000/opinions/" + id + "/upvote",
+      {
+        method: "POST",
+      }
+    );
+    if (!response.ok) {
+      return;
+    }
     setOpinions((prevOpinions) => {
       return prevOpinions.map((opinion) => {
         if (opinion.id === id) {
-          const votes = opinion.votes ? opinion.votes + 1 : 0;
+          const votes = (opinion.votes ? opinion.votes : 0) + 1;
           return { ...opinion, votes: votes };
         }
         return opinion;
@@ -44,11 +53,20 @@ const OpinionsContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
     });
   };
 
-  const downvoteOpinion = (id: number): void => {
+  const downvoteOpinion = async (id: number): Promise<void> => {
+    const response = await fetch(
+      "http://localhost:3000/opinions/" + id + "/downvote",
+      {
+        method: "POST",
+      }
+    );
+    if (!response.ok) {
+      return;
+    }
     setOpinions((prevOpinions) => {
       return prevOpinions.map((opinion) => {
         if (opinion.id === id) {
-          const votes = opinion.votes ? opinion.votes - 1 : 0;
+          const votes = (opinion.votes ? opinion.votes : 0) - 1;
           return { ...opinion, votes: votes };
         }
         return opinion;

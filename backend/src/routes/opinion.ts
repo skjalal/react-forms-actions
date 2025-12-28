@@ -33,9 +33,7 @@ export async function upvoteOpinion(id: number): Promise<Opinion | null> {
   if (!opinion) {
     return null;
   }
-  if (opinion.votes) {
-    opinion.votes++;
-  }
+  opinion.votes = (opinion.votes ? opinion.votes : 0) + 1;
   await fs.writeFile(filePath, JSON.stringify({ opinions }, null, 2));
   return opinion;
 }
@@ -47,9 +45,7 @@ export async function downvoteOpinion(id: number): Promise<Opinion | null> {
   if (!opinion) {
     return null;
   }
-  if (opinion.votes) {
-    opinion.votes--;
-  }
+  opinion.votes = (opinion.votes ? opinion.votes : 0) - 1;
   await fs.writeFile(filePath, JSON.stringify({ opinions }, null, 2));
   return opinion;
 }

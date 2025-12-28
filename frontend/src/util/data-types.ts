@@ -13,8 +13,8 @@ type OpinionProps = {
 type OpinionsContextProps = {
   opinions: Opinion[] | null;
   addOpinion: (opinion: Opinion) => Promise<void>;
-  upvoteOpinion: (id: number) => void;
-  downvoteOpinion: (id: number) => void;
+  upvoteOpinion: (id: number) => Promise<void>;
+  downvoteOpinion: (id: number) => Promise<void>;
 };
 
 type FormState = {

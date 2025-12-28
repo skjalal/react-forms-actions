@@ -5,11 +5,11 @@ const defaultAddOpinion = async (opinion: Opinion): Promise<void> => {
   console.log("Default Add Opinion invoked: ", opinion);
 };
 
-const defaultUpvoteOpinion = (id: number) => {
+const defaultUpvoteOpinion = async (id: number): Promise<void> => {
   console.log("Default UpvoteOpinion invoked: ", id);
 };
 
-const defaultDownvoteOpinion = (id: number) => {
+const defaultDownvoteOpinion = async (id: number): Promise<void> => {
   console.log("Default DownvoteOpinion invoked: ", id);
 };
 
