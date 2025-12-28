@@ -30,6 +30,10 @@ const Opinion: React.FC<OpinionProps> = ({
   const [downvoteFormState, downvoteFormAction, downvotePending] =
     useActionState<Promise<void> | null, FormData>(downvoteAction, null);
 
+  if (upvoteFormState != null && downvoteFormState !== null) {
+    console.log("Form state changed");
+  }
+
   return (
     <article>
       <header>
