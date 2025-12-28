@@ -1,4 +1,4 @@
-import React, { useActionState } from "react";
+import React, { useActionState, useOptimistic } from "react";
 import type { OpinionProps } from "../util/data-types.ts";
 import { useOpinion } from "../store/opinions-context.tsx";
 
@@ -6,11 +6,20 @@ const Opinion: React.FC<OpinionProps> = ({
   opinion: { id, title, body, userName, votes },
 }) => {
   const { upvoteOpinion, downvoteOpinion } = useOpinion();
+  const defaultVotes: number = votes || 0;
+  const [optimisticVotes, setVotesOptimistically] = useOptimistic<
+    number,
+    string
+  >(defaultVotes, (prevVotes, mode) =>
+    mode === "up" ? prevVotes + 1 : prevVotes - 1
+  );
   const upvoteAction = async (): Promise<void> => {
+    setVotesOptimistically("up");
     await upvoteOpinion(id!);
   };
 
   const downvoteAction = async (): Promise<void> => {
+    setVotesOptimistically("down");
     await downvoteOpinion(id!);
   };
 
@@ -50,7 +59,7 @@ const Opinion: React.FC<OpinionProps> = ({
           </svg>
         </button>
 
-        <span>{votes}</span>
+        <span>{optimisticVotes}</span>
 
         <button
           formAction={downvoteFormAction}
